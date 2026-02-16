@@ -1,6 +1,12 @@
 import express, { Request, Response } from "express";
+import { Pool } from "pg";
 const app = express()
 const port = 5000;
+
+
+const pool = new Pool({
+    connectionString: `postgresql://neondb_owner:npg_hvOm29VlBFxM@ep-crimson-thunder-aig08dr7-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require`
+});
 
 
 //cookie parser
