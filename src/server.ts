@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { Pool } from "pg";
 import dotenv from "dotenv"
 import path from "path"
+import { error } from "console";
 
 //env config
 
@@ -109,6 +110,39 @@ app.get("/users", async (req: Request, res: Response) => {
   }
 
 })
+
+
+// single users get api
+
+app.get("/users/:id", async (req: Request, res: Response) => {
+  try { 
+    const result = await pool.query(`SELECT * FROM users WHERE id =$1 `, [req.params.id]);
+    if (result.rows.length === 0) {
+      res.status(400).json({
+        success: false,
+        message:"No data found!"
+      })
+    }
+
+
+    else {
+      res.status(200).json({
+        success: true,
+        massage: "User data fetched!",
+        data: result.rows[0],
+        
+      })
+    }
+  }
+  catch (error: any) {
+    
+  }
+})
+
+
+
+
+
 
 
 app.listen(port, () => {
