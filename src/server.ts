@@ -1,5 +1,12 @@
 import express, { Request, Response } from "express";
 import { Pool } from "pg";
+import dotenv from "dotenv"
+import path from "path"
+
+//env config
+
+dotenv.config({path:path.join(process.cwd(), ".env")})
+
 const app = express()
 const port = 5000;
 //cookie parser
@@ -10,15 +17,14 @@ app.use(express.json());
 
 
 const pool = new Pool({
-  connectionString: `postgresql://
-    neondb_owner:npg_hvOm29VlBFxM@ep-crimson-thunder-aig08dr7-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require`
+  connectionString: `${process.env.CONNECTION_STR}`
 });
 
 
 
 const initDB = async () => {
   await pool.query(`
-    CREATE TABLE IS NOT EXISTS users(
+    CREATE TABLE IF NOT EXISTS users(
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(1500) UNIQUE NOT NULL,
@@ -26,11 +32,25 @@ const initDB = async () => {
     phone VARCHAR(100),
     address TEXT,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
     )
     `
+  );
 
-  )
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS todos (
+      id SERIAL PRIMARY KEY,
+      user_id INT REFERENCES users(id) ON DELETE CASCADE,
+      title VARCHAR(2500) NOT NULL,
+      description TEXT,
+      completed BOOLEAN DEFAULT false,
+      due_date DATE,
+      created_at TIMESTAMP DEFAULT NOW(),
+      updated_at TIMESTAMP DEFAULT NOW()
+    )
+  `);
+
+  
 }
 
 
@@ -42,7 +62,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.post("/", (req: Request, res: Response) => {
-    console.log(req.body);
+    // console.log(req.body);
     res.status(201).json({
         success: true,
         message: "API is working",
