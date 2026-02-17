@@ -140,6 +140,54 @@ app.get("/users/:id", async (req: Request, res: Response) => {
 })
 
 
+// Update user by ID
+app.put("/users/:id", async (req: Request, res: Response) => {
+  try {
+    const { name, email } = req.body;
+
+    // ❌ check required fields
+    if (!name || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "Name and email are required",
+      });
+    }
+
+    const result = await pool.query(
+      `UPDATE users
+       SET name = $1, email = $2
+       WHERE id = $3
+       RETURNING *`,
+      [name, email, req.params.id]
+    );
+
+    // ❌ user not found
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // ✅ success response
+    return res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      data: result.rows[0],
+    });
+
+  } catch (error: any) {
+    // 🔴 server error
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+
+
 
 
 
