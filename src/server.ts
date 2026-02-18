@@ -225,6 +225,16 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
 
 
 
+//todos crud
+
+
+
+
+
+
+
+
+
 
 
 
