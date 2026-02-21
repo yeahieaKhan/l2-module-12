@@ -1,15 +1,15 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Pool } from "pg";
-import dotenv from "dotenv"
-import path from "path"
+
 import { error } from "console";
+import config from "./config";
 
 //env config
 
-dotenv.config({path:path.join(process.cwd(), ".env")})
+
 
 const app = express()
-const port = 5000;
+const port = config.port;
 //cookie parser
 app.use(express.json());
 
@@ -18,7 +18,7 @@ app.use(express.json());
 
 
 const pool = new Pool({
-  connectionString: `${process.env.CONNECTION_STR}`
+  connectionString: `${config.connection_str}`
 });
 
 
