@@ -30,6 +30,55 @@ const createUser =  async (req: Request, res: Response) => {
 
 }
 
+
+const getUsers =   async (req: Request, res: Response) => {
+  try {
+    const result = await userServices.getUserDB();
+    res.status(200).json({
+      success: true,
+      message: "User Reading successfully",
+      data: result.rows,
+      
+    })
+
+  } catch (error : any) {
+    res.status(500).json({
+      success: false,
+      message:error.message
+    })
+  }
+
+}
+
+
+const getSingleUser = async (req: Request, res: Response) => {
+  try { 
+    const result = await userServices.getSingleUserDB(req.params.id as string);
+    if (result.rows.length === 0) {
+      res.status(400).json({
+        success: false,
+        message:"No data found!"
+      })
+    }
+
+
+    else {
+      res.status(200).json({
+        success: true,
+        massage: "User data fetched!",
+        data: result.rows[0],
+        
+      })
+    }
+  }
+  catch (error: any) {
+    
+  }
+}
+
+
 export const userController = {
-    createUser
+  createUser,
+  getUsers,
+  getSingleUser
 }

@@ -5,6 +5,19 @@ const createUserDB = async (name:string,email:string) => {
     return result;
 }
 
+
+const getUserDB = async () => {
+    const result = await pool.query(`SELECT * FROM users`);
+    return result;
+}
+
+const getSingleUserDB = async (id:string) => {
+    const result = await pool.query(`SELECT * FROM users WHERE id =$1 `, [id]);
+    return result
+}
+
 export const userServices = {
-    createUserDB
+    createUserDB,
+    getUserDB,
+    getSingleUserDB,
 }
