@@ -9,6 +9,14 @@ const createTodoDB = async(id:string) => {
     return result
 }
 
+
+
+const getToDoDB = async () => {
+    const result = pool.query(`SELECT * FROM todos ORDER BY id DESC`);
+    return result
+}
+
 export const todosService ={
-    createTodoDB
+    createTodoDB,
+    getToDoDB
 }

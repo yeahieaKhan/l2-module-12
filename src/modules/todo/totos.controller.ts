@@ -35,7 +35,29 @@ const createTodos = async (req: Request, res: Response) => {
 }
 
 
+
+const getTodos = async (req: Request, res: Response) => {
+  try {
+    const result = await todosService.getToDoDB();
+    res.status(200).json({
+      success: true,
+      message: "todos Reading successfully",
+      data: result.rows,
+      
+    })
+
+  } catch (error : any) {
+    res.status(500).json({
+      success: false,
+      message:error.message
+    })
+  }
+
+}
+
+
 export const todosController = {
-    createTodos
+  createTodos,
+  getTodos
 }
 

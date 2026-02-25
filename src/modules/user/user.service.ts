@@ -7,7 +7,7 @@ const createUserDB = async (name:string,email:string) => {
 
 
 const getUserDB = async () => {
-    const result = await pool.query(`SELECT * FROM users`);
+    const result = await pool.query(`SELECT * FROM users ORDER BY id DESC`);
     return result;
 }
 
