@@ -3,12 +3,12 @@ import { pool } from "../../config/db";
 import { userServices } from "./user.service";
 
 const createUser =  async (req: Request, res: Response) => {
-  const { name, email } = req.body;
+  
 
 
   try {
 
-      const result = await userServices.createUserDB(name,email)
+      const result = await userServices.createUserDB(req.body)
       
 
     console.log(result.rows)
@@ -23,7 +23,7 @@ const createUser =  async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({
       success:false,
-      message: error.message
+      message: "Something went rwong"
     })
   }
 
