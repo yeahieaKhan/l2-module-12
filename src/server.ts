@@ -38,7 +38,7 @@ app.get("/todos", todosRouter);
 
 // auth router
 
-app.use("/", authRouters);
+app.use("/auth", authRouters);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
